@@ -41,3 +41,42 @@ function addRem(){var f=document.querySelector('.auth .forgotrow');if(!f||f.quer
 var st=document.createElement('style');st.textContent='.remme{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;margin:0;font-weight:500}.remme input{width:18px;height:18px;margin:0;accent-color:#7033ed;padding:0}';document.head.appendChild(st);
 new MutationObserver(addRem).observe(document.documentElement,{childList:true,subtree:true});
 })();
+;(function(){
+var E=function(id){return document.getElementById(id)};
+function ar(){return window.lang==='ar'}
+function tx(en,a){return ar()?a:en}
+function shell(inner){var app=E('app');app.innerHTML='<div class="card auth fpflow">'+inner+'</div>'}
+function msg(c,t){var m=E('fpmsg');if(m){m.className=c;m.textContent=t}}
+window.forgotFlow=function(){
+ var pre='';var e0=E('em');if(e0)pre=e0.value.trim();
+ shell('<h2>'+tx('Recover your account','استعادة حسابك')+'</h2><p class="help">'+tx('Enter the email of your account. We will send a code to it.','اكتب بريد حسابك وسنرسل إليه رمزًا.')+'</p><label>'+tx('Email','البريد الإلكتروني')+'</label><input id="fpem" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false"><button class="btn authbtn" id="fpsend" type="button">'+tx('Send code','إرسال الرمز')+'</button><div id="fpmsg" role="status"></div><p class="forgotrow" style="text-align:center"><a href="#" id="fpback">'+tx('Back to login','العودة لتسجيل الدخول')+'</a></p>');
+ E('fpem').value=pre;
+ E('fpback').onclick=function(ev){ev.preventDefault();render()};
+ E('fpem').onkeydown=function(ev){if(ev.key==='Enter')E('fpsend').click()};
+ E('fpsend').onclick=async function(){
+  var em=E('fpem').value.trim().toLowerCase();
+  if(!em||em.indexOf('@')<1){msg('err',tx('Enter a valid email.','اكتب بريدًا صحيحًا.'));return}
+  var b=E('fpsend');b.disabled=true;
+  var r=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});
+  b.disabled=false;
+  if(r.error){msg('err',r.error.message);return}
+  codeStep(em)
+ }
+};
+function codeStep(em){
+ shell('<h2>'+tx('Enter the code','أدخل الرمز')+'</h2><p class="help">'+tx('We sent a code to ','أرسلنا رمزًا إلى ')+'<b dir="ltr">'+em.replace(/</g,'')+'</b>. '+tx('Check your inbox and spam. You can also tap the link in the email instead.','تحقق من الوارد والرسائل المزعجة. يمكنك أيضًا الضغط على الرابط في الرسالة.')+'</p><label>'+tx('Code from email','الرمز من البريد')+'</label><input id="fpcode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" style="letter-spacing:6px;font-size:20px;text-align:center"><button class="btn authbtn" id="fpver" type="button">'+tx('Verify code','تأكيد الرمز')+'</button><div id="fpmsg" role="status"></div><p class="forgotrow" style="text-align:center"><a href="#" id="fpagain">'+tx('Send a new code','إرسال رمز جديد')+'</a> &middot; <a href="#" id="fpback">'+tx('Back to login','العودة لتسجيل الدخول')+'</a></p>');
+ E('fpback').onclick=function(ev){ev.preventDefault();render()};
+ E('fpagain').onclick=async function(ev){ev.preventDefault();var r=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});msg(r.error?'err':'ok',r.error?r.error.message:tx('A new code was sent.','تم إرسال رمز جديد.'))};
+ E('fpcode').onkeydown=function(ev){if(ev.key==='Enter')E('fpver').click()};
+ E('fpver').onclick=async function(){
+  var c=E('fpcode').value.replace(/\s/g,'');
+  if(c.length<6){msg('err',tx('Enter the code from the email.','اكتب الرمز من البريد.'));return}
+  var b=E('fpver');b.disabled=true;
+  recovering=true;
+  var r=await sb.auth.verifyOtp({email:em,token:c,type:'recovery'});
+  b.disabled=false;
+  if(r.error){recovering=false;msg('err',tx('That code is wrong or expired. Try again or send a new code.','الرمز خاطئ أو منتهي. حاول مجددًا أو أرسل رمزًا جديدًا.'));return}
+  recoveryView()
+ }
+}
+})();
