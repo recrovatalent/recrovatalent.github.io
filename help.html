@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Help Center - Recrova Talent</title>
+<meta name="description" content="How to use Recrova Talent: create an account, complete your profile, apply to jobs, post a job, verification, reset your password and contact us.">
+<style>
+:root{--bg:#f6f3ff;--card:#fff;--tx:#12104F;--mu:#6b6890;--bd:#e7e3f0;--pr:#5B2DE8}
+@media(prefers-color-scheme:dark){:root{--bg:#0d0b22;--card:#1a1740;--tx:#ecebff;--mu:#a9a6d0;--bd:#2f2b63;--pr:#a78bfa}}
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:var(--bg);color:var(--tx);line-height:1.65}
+header{background:linear-gradient(110deg,#0F0B4A,#21136a);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}header a.lg{color:#fff;text-decoration:none;font-weight:700;font-size:20px}header span{color:#c9b2ff;font-weight:400}
+.lb{background:#fff;color:#4a21c9;border:0;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer}
+main{max-width:760px;margin:22px auto;padding:0 16px 48px}h1{font-size:28px;margin:8px 0 4px}h2{font-size:19px;margin:0 0 6px}
+.sub{color:var(--mu);margin:0 0 18px}.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px 20px;margin:0 0 12px}
+a{color:var(--pr)}.list a.it{display:block;text-decoration:none;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px 18px;margin:0 0 10px;font-weight:600}
+.list a.it small{display:block;color:var(--mu);font-weight:400}ol,ul{padding-inline-start:22px}li{margin:6px 0}
+input,textarea,select{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;margin:4px 0 12px}
+.btn{background:var(--pr);color:#fff;border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;cursor:pointer}.btn[disabled]{opacity:.6}
+.ok{color:#16a34a;font-weight:600}.er{color:#dc2626}.back{display:inline-block;margin:0 0 12px}
+footer{text-align:center;color:var(--mu);font-size:13px;padding:10px 0 30px}footer a{margin:0 8px}
+</style></head><body>
+<header><a class="lg" href="/">Recrova <span>Talent</span></a><button class="lb" id="lb" onclick="tg()">العربية</button></header>
+<main id="m"></main>
+<footer id="ft"></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var L=localStorage.lang==='ar'?'ar':'en';
+var EM='recrovatalents@gmail.com';
+var A=[
+{id:'account',t:['Create an account','إنشاء حساب'],s:['Sign up with email or Google','سجّل بالبريد أو بحساب Google'],b:[
+`<ol><li>Open Recrova Talent and tap <b>Sign up</b>.</li><li>Choose whether you are a person looking for work or a company hiring, then enter your name (or company name), email and a password of 6+ characters. Or tap <b>Continue with Google</b>.</li><li>If you signed up with email, open the confirmation email we send you and confirm it, then log in.</li><li>On your first login a short welcome flow asks for your name, birth date (16+, never shown on your profile), location, job title and an optional photo. You only do it once.</li></ol>`,
+`<ol><li>افتح Recrova Talent واضغط <b>إنشاء حساب</b>.</li><li>اختر إن كنت شخصاً يبحث عن عمل أو شركة توظف، ثم اكتب اسمك (أو اسم الشركة) وبريدك وكلمة مرور من 6 أحرف أو أكثر. أو اضغط <b>المتابعة باستخدام Google</b>.</li><li>إذا سجلت بالبريد، افتح رسالة التأكيد التي وصلتك وأكّد بريدك ثم سجّل الدخول.</li><li>عند أول دخول تظهر خطوات قصيرة تسألك عن الاسم وتاريخ الميلاد (16 سنة أو أكثر ولا يظهر في ملفك) والموقع والمسمى الوظيفي وصورة اختيارية. تفعلها مرة واحدة فقط.</li></ol>`]},
+{id:'profile',t:['Complete your profile','أكمل ملفك الشخصي'],s:['Photo, headline, about, experience, CV','الصورة والنبذة والخبرات والسيرة الذاتية'],b:[
+`<ol><li>Go to <b>My Profile</b> and open the menu (the three dots) to edit your profile.</li><li>Add a photo, a headline (for example your job title) and an About section.</li><li>Add your experience with <b>Add experience</b>: role, company and period.</li><li>In Settings you can upload a CV. The CV is private: only you can open it.</li></ol><p>A complete profile helps companies find you.</p>`,
+`<ol><li>اذهب إلى <b>ملفي</b> وافتح القائمة (النقاط الثلاث) لتعديل الملف.</li><li>أضف صورة ونبذة قصيرة (مثل مسماك الوظيفي) وقسم "عن".</li><li>أضف خبراتك من <b>إضافة خبرة</b>: المسمى والشركة والفترة.</li><li>من الإعدادات يمكنك رفع سيرتك الذاتية. السيرة خاصة ولا يفتحها غيرك.</li></ol><p>الملف المكتمل يساعد الشركات على الوصول إليك.</p>`]},
+{id:'apply',t:['Apply to jobs','التقديم على الوظائف'],s:['Search, filter and apply','ابحث وصفّي وقدّم'],b:[
+`<ol><li>Open the <b>Jobs</b> tab.</li><li>Search by title or company. You can also filter by minimum salary, currency and period.</li><li>Each job shows when it was posted and how many people applied.</li><li>Tap <b>Apply</b>. Some jobs apply on the company's own link or email; those open in a new tab or your mail app.</li></ol><p>Tap the company name to see its page, or the poster's name to see who posted the job.</p>`,
+`<ol><li>افتح تبويب <b>الوظائف</b>.</li><li>ابحث بالمسمى أو اسم الشركة. ويمكنك التصفية حسب الحد الأدنى للراتب والعملة والفترة.</li><li>تعرض كل وظيفة وقت نشرها وعدد المتقدمين.</li><li>اضغط <b>تقديم</b>. بعض الوظائف يكون التقديم فيها عبر رابط الشركة أو بريدها، وتفتح في تبويب جديد أو تطبيق البريد.</li></ol><p>اضغط اسم الشركة لعرض صفحتها، أو اسم الناشر لمعرفة من نشر الوظيفة.</p>`]},
+{id:'post',t:['Post a job','نشر وظيفة'],s:['For companies and recruiters','للشركات والموظِّفين'],b:[
+`<ol><li>Tap <b>Post a Job</b>.</li><li>Enter the job title, company, location, type, salary (optional) and description. Choose how people apply: on Recrova, by link or by email.</li><li>Tap <b>Publish</b>.</li><li>Later you can <b>Edit</b>, <b>Close</b> or <b>Reopen</b> the job from the Jobs tab, and see everyone who applied under <b>Applicants</b>.</li></ol>`,
+`<ol><li>اضغط <b>انشر وظيفة</b>.</li><li>اكتب المسمى والشركة والموقع والنوع والراتب (اختياري) والوصف. واختر طريقة التقديم: عبر Recrova أو برابط أو ببريد.</li><li>اضغط <b>نشر</b>.</li><li>يمكنك لاحقاً <b>تعديل</b> الوظيفة أو <b>إغلاقها</b> أو <b>إعادة فتحها</b> من تبويب الوظائف، ورؤية كل المتقدمين من <b>المتقدمون</b>.</li></ol>`]},
+{id:'verify',t:['Verification badge','علامة التوثيق'],s:['What the blue check means','ما معنى العلامة الزرقاء'],b:[
+`<p>The blue check next to a name means the Recrova Talent team has verified that account. It cannot be added by users. If you think your account or company should be verified, <a href="#contact">contact us</a> and tell us who you are.</p>`,
+`<p>العلامة الزرقاء بجوار الاسم تعني أن فريق Recrova Talent وثّق هذا الحساب. لا يستطيع المستخدمون إضافتها بأنفسهم. إذا رأيت أن حسابك أو شركتك تستحق التوثيق فـ<a href="#contact">تواصل معنا</a> وعرّفنا بنفسك.</p>`]},
+{id:'password',t:['Reset your password','إعادة تعيين كلمة المرور'],s:['If you forgot it','إذا نسيتها'],b:[
+`<ol><li>On the login page tap <b>Forgot password?</b>.</li><li>Enter your email and send the request.</li><li>Open the email and follow the link to choose a new password.</li></ol><p>If you signed up with Google, you do not have a password: use <b>Continue with Google</b>. If the email does not arrive, check your spam folder or <a href="#contact">contact us</a>.</p><p>To change it while logged in, go to Settings > Change password.</p>`,
+`<ol><li>في صفحة الدخول اضغط <b>نسيت كلمة المرور؟</b>.</li><li>اكتب بريدك وأرسل الطلب.</li><li>افتح الرسالة واتبع الرابط لاختيار كلمة مرور جديدة.</li></ol><p>إذا سجلت بحساب Google فليس لديك كلمة مرور: استخدم <b>المتابعة باستخدام Google</b>. وإذا لم تصل الرسالة فتفقد البريد المزعج أو <a href="#contact">تواصل معنا</a>.</p><p>لتغييرها وأنت داخل حسابك: الإعدادات > تغيير كلمة المرور.</p>`]},
+{id:'report',t:['Report a problem','الإبلاغ عن مشكلة'],s:['Jobs, accounts or bugs','وظائف أو حسابات أو أعطال'],b:[
+`<ul><li><b>A job:</b> open the job's <b>...</b> menu and choose to report it, with a reason.</li><li><b>A person or a message:</b> open their profile or the chat menu to block or mute them.</li><li><b>A bug or anything else:</b> <a href="#contact">send us a message</a> with what you did and what you saw.</li></ul>`,
+`<ul><li><b>وظيفة:</b> افتح قائمة <b>...</b> في الوظيفة واختر الإبلاغ مع ذكر السبب.</li><li><b>شخص أو رسالة:</b> افتح ملفه أو قائمة المحادثة لحظره أو كتم إشعاراته.</li><li><b>عطل أو أي شيء آخر:</b> <a href="#contact">أرسل لنا رسالة</a> بما فعلته وما ظهر لك.</li></ul>`]},
+{id:'delete',t:['Delete your account','حذف الحساب'],s:['Settings > Close account','الإعدادات > إغلاق الحساب'],b:[
+`<p>Go to Settings > <b>Close account</b> to delete your account. You can also email <a href="mailto:${EM}?subject=Delete%20my%20Recrova%20Talent%20account">${EM}</a>. See the <a href="privacy.html">Privacy Policy</a> for details.</p>`,
+`<p>اذهب إلى الإعدادات > <b>إغلاق الحساب</b> لحذف حسابك. ويمكنك أيضاً مراسلة <a href="mailto:${EM}?subject=Delete%20my%20Recrova%20Talent%20account">${EM}</a>. راجع <a href="privacy.html">سياسة الخصوصية</a> للتفاصيل.</p>`]}
+];
+var X={en:{h:'Help Center',s:'Guides for using Recrova Talent.',back:'← All articles',ct:'Contact us',cs:'Send us a message and we will reply by email. Or write to ',nm:'Your name',em:'Your email',tp:'Topic',msg:'Your message',send:'Send',sent:'Message sent. Thank you, we will get back to you by email.',err:'Could not send. Please try again, or email us.',bad:'Enter a valid email and a message of at least 5 characters.',tps:['Question','Report a problem','Verification request','Other'],home:'Back to Recrova Talent',pv:'Privacy Policy',help:'Help Center'},
+ar:{h:'مركز المساعدة',s:'أدلة لاستخدام Recrova Talent.',back:'← كل المقالات',ct:'تواصل معنا',cs:'أرسل لنا رسالة وسنرد عليك بالبريد. أو راسلنا على ',nm:'اسمك',em:'بريدك الإلكتروني',tp:'الموضوع',msg:'رسالتك',send:'إرسال',sent:'تم إرسال رسالتك. شكراً لك، سنرد عليك بالبريد.',err:'تعذر الإرسال. حاول مرة أخرى أو راسلنا بالبريد.',bad:'اكتب بريداً صحيحاً ورسالة من 5 أحرف على الأقل.',tps:['سؤال','الإبلاغ عن مشكلة','طلب توثيق','أخرى'],home:'العودة إلى Recrova Talent',pv:'سياسة الخصوصية',help:'مركز المساعدة'}};
+var sb=null;try{sb=supabase.createClient("https://wfznzvctfxddafsiycwv.supabase.co","sb_publishable_5GcNQmqR6f1h8I2TcXYlvw_tN7fs1MD")}catch(e){}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function tg(){L=L==='ar'?'en':'ar';localStorage.lang=L;draw()}
+function draw(){var x=X[L],i=L==='ar'?1:0,h=(location.hash||'').slice(1);document.documentElement.lang=L;document.documentElement.dir=L==='ar'?'rtl':'ltr';document.getElementById('lb').textContent=L==='ar'?'English':'العربية';
+var a=A.filter(function(q){return q.id===h})[0],o='';
+if(a){o='<a class="back" href="#">'+x.back+'</a><div class="card"><h1>'+a.t[i]+'</h1>'+a.b[i]+'</div>';document.title=a.t[i]+' - Recrova Talent'}
+else{document.title=x.h+' - Recrova Talent';o='<h1>'+x.h+'</h1><p class="sub">'+x.s+'</p><div class="list">'+A.map(function(q){return '<a class="it" href="#'+q.id+'">'+q.t[i]+'<small>'+q.s[i]+'</small></a>'}).join('')+'</div>'}
+o+='<div class="card" id="contact"><h2>'+x.ct+'</h2><p class="sub">'+x.cs+'<a href="mailto:'+EM+'">'+EM+'</a></p><form id="cf" onsubmit="return sendc(event)"><label>'+x.nm+'<input id="cn" maxlength="120" autocomplete="name"></label><label>'+x.em+'<input id="ce" type="email" maxlength="200" autocomplete="email" required></label><label>'+x.tp+'<select id="ct">'+x.tps.map(function(t,k){return '<option value="'+X.en.tps[k]+'">'+t+'</option>'}).join('')+'</select></label><label>'+x.msg+'<textarea id="cm" rows="5" maxlength="4000" required></textarea></label><button class="btn" id="cb">'+x.send+'</button><p id="cs2" role="status"></p></form></div>';
+document.getElementById('m').innerHTML=o;
+document.getElementById('ft').innerHTML='<a href="/">'+x.home+'</a> · <a href="privacy.html">'+x.pv+'</a> · <a href="#">'+x.help+'</a><div>© 2026 Recrova Talent</div>';
+if(h==='contact')setTimeout(function(){var c=document.getElementById('contact');c&&c.scrollIntoView()},50)}
+async function sendc(e){e.preventDefault();var x=X[L],s=document.getElementById('cs2'),em=document.getElementById('ce').value.trim(),m=document.getElementById('cm').value.trim();if(!/^\S+@\S+\.\S+$/.test(em)||m.length<5){s.className='er';s.textContent=x.bad;return false}
+var b=document.getElementById('cb');b.disabled=true;s.className='';s.textContent='...';var uid=null;try{var r=await sb.auth.getSession();uid=r.data.session&&r.data.session.user.id}catch(e2){}
+var r2=await sb.from('contact_messages').insert({name:document.getElementById('cn').value.trim()||null,email:em,topic:document.getElementById('ct').value,message:m,user_id:uid});b.disabled=false;
+if(r2.error){s.className='er';s.textContent=x.err;return false}s.className='ok';s.textContent=x.sent;document.getElementById('cf').reset();return false}
+window.addEventListener('hashchange',draw);draw();
+</script></body></html>
