@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Recrova Talent - Prototype</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:#f3f2ef;color:#1d2226}
+header{background:#fff;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:5}
+.bar{max-width:1100px;margin:auto;display:flex;align-items:center;gap:16px;padding:10px 16px}
+.logo{font-weight:800;color:#0f766e;font-size:20px}.logo span{color:#1d2226;font-weight:500}
+nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}nav button{border:0;background:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:14px;color:#555}
+nav button.on{background:#ccfbf1;color:#0f766e;font-weight:600}
+main{max-width:1100px;margin:16px auto;padding:0 16px}
+.grid{display:grid;grid-template-columns:260px 1fr;gap:16px}@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #e0dfdc;border-radius:10px;padding:16px;margin-bottom:12px}
+.av{width:44px;height:44px;border-radius:50%;background:#0f766e;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.sq{border-radius:8px;background:#334155}
+.row{display:flex;gap:12px;align-items:center}.muted{color:#666;font-size:13px}
+.btn{background:#0f766e;color:#fff;border:0;border-radius:20px;padding:7px 16px;cursor:pointer;font-weight:600}.btn.o{background:#fff;color:#0f766e;border:1px solid #0f766e}
+input,textarea,select{width:100%;padding:9px;border:1px solid #ccc;border-radius:8px;font:inherit;margin:4px 0 10px}
+.tag{background:#f1f5f9;border-radius:12px;padding:2px 10px;font-size:12px;margin-right:4px}
+.page{display:none}.page.on{display:block}
+.msgs{display:grid;grid-template-columns:260px 1fr;min-height:400px}.msgs .l{border-right:1px solid #eee}
+.th{padding:10px;cursor:pointer;border-bottom:1px solid #f0f0f0}.th:hover{background:#f8fafc}
+.b{max-width:70%;padding:8px 12px;border-radius:14px;margin:6px 0}.me{background:#0f766e;color:#fff;margin-left:auto}.th2{background:#eef2f1}
+.note{background:#fef9c3;border:1px solid #fde047;padding:8px 12px;border-radius:8px;font-size:13px;margin-bottom:12px}
+
+header{background:linear-gradient(90deg,#0f766e,#115e59);border:0}.logo{color:#fff}.logo span{color:#99f6e4}
+nav button{color:#d1fae5}nav button.on{background:#fff;color:#0f766e}
+.hero{background:linear-gradient(135deg,#0f766e,#0e7490);color:#fff;border-radius:14px;padding:28px;margin-bottom:16px}
+.hero h1{margin:0 0 6px;font-size:28px}.hero p{margin:0 0 14px;opacity:.9}.hero .btn{background:#fff;color:#0f766e}
+.lang{background:#fff!important;color:#0f766e!important;border-radius:16px!important;font-weight:700}
+.card{transition:box-shadow .15s}.card:hover{box-shadow:0 4px 14px rgba(0,0,0,.08)}
+[dir=rtl] nav{margin-left:0;margin-right:auto}[dir=rtl] .msgs .l{border-right:0;border-left:1px solid #eee}
+[dir=rtl] .me{margin-left:0;margin-right:auto}[dir=rtl] .btn[style*="margin-left:auto"]{margin-left:0!important;margin-right:auto}
+</style></head><body>
+<header><div class="bar"><div class="logo">Recrova <span>Talent</span></div>
+<nav id="nav"><button data-p="feed" class="on">Feed</button><button data-p="jobs">Jobs</button><button data-p="network">Network</button><button data-p="msgs">Messages</button><button data-p="profile">My Profile</button><button data-p="company">Company</button><button data-p="post">Post a Job</button></nav><button class="lang btn" id="lb" onclick="toggleLang()">عربي</button></div></header>
+<main>
+<div class="note">Prototype only. Sample data, nothing is saved, no real accounts yet. Click around to see the flow.</div>
+
+<section class="page on" id="feed"><div class="hero"><h1 data-i="h1">Hire and get hired, simply.</h1><p data-i="h2">One place for people and companies: profiles, jobs, posts and messages.</p><button class="btn" onclick="show('jobs')" data-i="h3">Browse jobs</button></div><div class="grid"><div>
+<div class="card"><div class="row"><div class="av">MA</div><div><b>Mostafa Ashraf</b><div class="muted">Founder</div></div></div><p class="muted">142 followers · 87 following</p></div>
+<div class="card"><b>Trending</b><p class="muted">#hiring-cairo<br>#frontend<br>#remote-egypt</p></div></div>
+<div><div class="card"><textarea id="np" rows="2" placeholder="Share an update or post..."></textarea><button class="btn" onclick="addPost()">Post</button></div>
+<div id="posts"></div></div></div></section>
+
+<section class="page" id="jobs"><div class="card"><div class="row"><input id="q" placeholder="Search jobs (title, company)" oninput="renderJobs()"><select id="loc" onchange="renderJobs()" style="max-width:200px"><option value="">All locations</option><option>Cairo</option><option>Giza</option><option>Remote</option></select></div></div><div id="joblist"></div></section>
+
+<section class="page" id="network"><div class="card"><b>People you may know</b></div><div id="people"></div></section>
+
+<section class="page" id="msgs"><div class="card msgs" style="padding:0"><div class="l" id="threads"></div><div style="padding:16px;display:flex;flex-direction:column"><div id="chat" style="flex:1"></div><div class="row"><input id="mi" placeholder="Write a message..."><button class="btn" onclick="send()">Send</button></div></div></div></section>
+
+<section class="page" id="profile"><div class="card"><div class="row"><div class="av" style="width:80px;height:80px;font-size:28px">MA</div><div><h2 style="margin:0">Mostafa Ashraf</h2><div class="muted">Founder at Recrova · Giza, Egypt</div></div><button class="btn o" style="margin-left:auto">Edit</button></div></div>
+<div class="card"><b>About</b><p>Building a simpler way for talent and companies to find each other.</p></div>
+<div class="card"><b>Experience</b><p>Founder, Recrova Talent<br><span class="muted">2026 - present</span></p></div>
+<div class="card"><b>Skills</b><p><span class="tag">Leadership</span><span class="tag">Product</span><span class="tag">Sales</span></p></div></section>
+
+<section class="page" id="company"><div class="card"><div class="row"><div class="av sq" style="width:80px;height:80px">NX</div><div><h2 style="margin:0">Nexa Systems</h2><div class="muted">Software · 50-200 employees · Cairo</div></div><button class="btn" style="margin-left:auto">Follow</button></div></div>
+<div class="card"><b>About</b><p>We build logistics software for Egyptian and Gulf businesses.</p></div><div class="card"><b>Open jobs</b><div id="cojobs"></div></div></section>
+
+<section class="page" id="post"><div class="card"><h3 style="margin-top:0">Post a job (company account)</h3>
+<label>Job title</label><input id="jt" placeholder="e.g. Frontend Developer"><label>Location</label><select id="jl"><option>Cairo</option><option>Giza</option><option>Remote</option></select>
+<label>Type</label><select id="jy"><option>Full-time</option><option>Part-time</option><option>Contract</option></select><label>Description</label><textarea rows="4" id="jd"></textarea>
+<button class="btn" onclick="addJob()">Publish</button></div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let posts=[{n:"Nexa Systems",t:"We're hiring 3 engineers in Cairo this month. Apply on Recrova!",l:12},{n:"Sara Hassan",t:"Just finished my UX course. Open to junior design roles in Giza.",l:34},{n:"Omar Khaled",t:"Tip: keep your CV to one page. Recruiters skim.",l:58}];
+let jobs=[{t:"Frontend Developer",c:"Nexa Systems",l:"Cairo",y:"Full-time"},{t:"Sales Executive",c:"Delta Motors",l:"Giza",y:"Full-time"},{t:"Customer Support (Arabic)",c:"Helio",l:"Remote",y:"Part-time"},{t:"Graphic Designer",c:"Pixel House",l:"Cairo",y:"Contract"}];
+const people=[["Sara Hassan","UX Designer"],["Omar Khaled","HR Manager, Delta Motors"],["Nour Ali","Backend Engineer"],["Helio Careers","Company"]];
+const followed=new Set();
+const threads={ "Sara Hassan":[["t","Hi, saw your post about hiring."],["m","Yes! Send me your CV."]],"Omar Khaled":[["t","Can we schedule an interview Sunday?"]]};
+let cur="Sara Hassan";
+function ini(n){return n.split(" ").map(x=>x[0]).join("").slice(0,2)}
+function renderPosts(){$("posts").innerHTML=posts.map((p,i)=>`<div class="card"><div class="row"><div class="av">${ini(p.n)}</div><b>${p.n}</b></div><p>${p.t}</p><button class="btn o" onclick="posts[${i}].l++;renderPosts()">👍 ${p.l}</button></div>`).join("")}
+function addPost(){const v=$("np").value.trim();if(!v)return;posts.unshift({n:"Mostafa Ashraf",t:v,l:0});$("np").value="";renderPosts()}
+function renderJobs(){const q=$("q").value.toLowerCase(),l=$("loc").value;$("joblist").innerHTML=jobs.filter(j=>(j.t+j.c).toLowerCase().includes(q)&&(!l||j.l==l)).map(j=>`<div class="card row"><div class="av sq">${ini(j.c)}</div><div><b>${j.t}</b><div class="muted">${j.c} · ${j.l} · ${j.y}</div></div><button class="btn" style="margin-left:auto" onclick="this.textContent='Applied ✓'">Apply</button></div>`).join("")||'<div class="card muted">No jobs match.</div>';$("cojobs").innerHTML=jobs.filter(j=>j.c=="Nexa Systems").map(j=>`<p>${j.t} <span class="muted">${j.l}</span></p>`).join("")}
+function renderPeople(){$("people").innerHTML=people.map(p=>`<div class="card row"><div class="av">${ini(p[0])}</div><div><b>${p[0]}</b><div class="muted">${p[1]}</div></div><button class="btn ${followed.has(p[0])?'o':''}" style="margin-left:auto" onclick="tf('${p[0]}')">${followed.has(p[0])?'Following':'Follow'}</button></div>`).join("")}
+function tf(n){followed.has(n)?followed.delete(n):followed.add(n);renderPeople()}
+function renderMsgs(){$("threads").innerHTML=Object.keys(threads).map(n=>`<div class="th" onclick="cur='${n}';renderMsgs()"><b>${n}</b></div>`).join("");$("chat").innerHTML=threads[cur].map(m=>`<div class="b ${m[0]=='m'?'me':'th2'}">${m[1]}</div>`).join("")}
+function send(){const v=$("mi").value.trim();if(!v)return;threads[cur].push(["m",v]);$("mi").value="";renderMsgs()}
+function addJob(){const t=$("jt").value.trim();if(!t)return;jobs.unshift({t,c:"Nexa Systems",l:$("jl").value,y:$("jy").value});$("jt").value="";renderJobs();show("jobs")}
+function show(p){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("on",e.id==p));document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.p==p))}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>show(b.dataset.p));
+
+const T={ar:{h1:"وظّف واتوظّف بسهولة.",h2:"مكان واحد للأفراد والشركات: بروفايلات، وظايف، بوستات ورسايل.",h3:"تصفح الوظايف",Feed:"الرئيسية",Jobs:"الوظايف",Network:"الشبكة",Messages:"الرسايل","My Profile":"بروفايلي",Company:"الشركة","Post a Job":"انشر وظيفة"}};
+let lang="en";const names=["Feed","Jobs","Network","Messages","My Profile","Company","Post a Job"];
+function toggleLang(){lang=lang=="en"?"ar":"en";document.documentElement.dir=lang=="ar"?"rtl":"ltr";document.documentElement.lang=lang;$("lb").textContent=lang=="ar"?"English":"عربي";
+document.querySelectorAll("[data-i]").forEach(e=>{if(!e.dataset.en)e.dataset.en=e.textContent;e.textContent=lang=="ar"?T.ar[e.dataset.i]:e.dataset.en});
+document.querySelectorAll("nav button").forEach((b,i)=>b.textContent=lang=="ar"?T.ar[names[i]]:names[i])}
+renderPosts();renderJobs();renderPeople();renderMsgs();
+</script></body></html>
