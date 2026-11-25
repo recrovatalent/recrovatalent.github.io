@@ -427,7 +427,7 @@ document.addEventListener('click',function(e){if(!e.target.closest||!e.target.cl
 function paintTools(art,rows){var tools=art.querySelector('.dmtools');if(!tools)return;var id=+art.dataset.mid;var mine=null,cnt={};rows.forEach(function(r){cnt[r.emoji]=(cnt[r.emoji]||0)+1;if(r.user_id===me.id)mine=r.emoji});
 tools.querySelectorAll('.rxchip,.rxlike').forEach(function(x){x.remove()});
 var old=tools.querySelectorAll('button[aria-label="React to message"],button[aria-label^="Reaction"]');old.forEach(function(x){x.remove()});
-var b=document.createElement('button');b.type='button';b.className='rxlike'+(mine?' on':'');b.setAttribute('aria-label',ar()?'تفاعل مع الرسالة':'React to message');var found=EM.filter(function(x){return x[0]===mine})[0];
+var b=document.createElement('button');b.type='button';b.className='rxlike'+(mine?' on':'');b.setAttribute('aria-label',ar()?'إعجاب (اضغط مطولاً لباقي التفاعلات)':'Like (hold for more reactions)');var found=EM.filter(function(x){return x[0]===mine})[0];
 b.innerHTML=(mine&&mine!=='👍'?'<span class="em">'+mine+'</span>':'<svg viewBox="0 0 24 24"><path d="M7 11v9H4v-9h3zm0 0l4-8c1.5 0 2.5 1 2.5 2.5V9h5.2a2 2 0 0 1 2 2.3l-1 6.5a2 2 0 0 1-2 1.7H7"/></svg>')+'<span>'+(found?(ar()?found[2]:found[1]):(ar()?'إعجاب':'Like'))+'</span>';
 var timer=null,lp=false;
 function openPop(){closePop();var p=document.createElement('div');p.className='rxpop';EM.forEach(function(x){var q=document.createElement('button');q.type='button';q.textContent=x[0];q.setAttribute('aria-label',ar()?x[2]:x[1]);q.onclick=function(ev){ev.stopPropagation();closePop();window.reactMessage(id,x[0])};p.appendChild(q)});tools.appendChild(p)}
