@@ -461,6 +461,6 @@ function restore(i){var s=stack[i];if(!s)return;if(cur>=0&&stack[cur])stack[cur]
 window.addEventListener('popstate',function(e){var st=e.state;if(!st||st.rv==null||stack.length===0)return;if(st.rv==='base'){history.pushState({rv:cur<0?0:cur},'',location.href);return}restore(st.rv)});
 function inst(){if(window.__rvNav)return;window.__rvNav=1;origRem=window.rememberScreen;if(origRem)window.rememberScreen=function(){job=null;var r=origRem.apply(this,arguments);try{check()}catch(e){}return r};origJob=window.jobPage;if(origJob)window.jobPage=function(id){if(!restoring){job=id;try{check()}catch(e){}}return origJob.apply(this,arguments)};try{check()}catch(e){}}
 window.addEventListener('load',function(){setTimeout(inst,50)});
-document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var tx=(a.textContent||'').trim();if(/^(←|→)/.test(tx)&&!/Conversations|المحادثات/.test('')&&cur>0){e.preventDefault();e.stopPropagation();history.back()}},true);
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var tx=(a.textContent||'').trim();if((/^(←|→|‹)/.test(tx)||/^(Back|Back to .{0,30}|رجوع.{0,30}|عودة.{0,30})$/.test(tx))&&cur>0){e.preventDefault();e.stopPropagation();history.back()}},true);
 window.__rvNavDebug=function(){return {cur:cur,n:stack.length,k:lastKey}};
 })();
