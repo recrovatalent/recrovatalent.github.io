@@ -407,3 +407,40 @@ document.querySelectorAll('.jmeta,.muted,.help,small,.chip,.pill').forEach(funct
 }catch(e){}busy=false}
 var q=false;function sch(){if(q)return;q=true;requestAnimationFrame(function(){q=false;run()})}
 new MutationObserver(sch).observe(document.body,{childList:true,subtree:true,characterData:true});sch()})();
+;(function(){
+var EM=[['👍','Like','إعجاب'],['❤️','Love','حب'],['🎉','Celebrate','تهنئة'],['🙌','Support','دعم'],['💡','Insightful','مفيد'],['😂','Funny','طريف']];
+var css='#presdot{top:2px!important;bottom:auto!important;right:2px!important}'
++'.dmtools{position:relative;flex-wrap:wrap}'
++'.dmtools .rxlike{display:inline-flex!important;align-items:center;gap:5px;width:auto!important;height:auto!important;padding:4px 10px!important;background:none!important;color:#6b6285!important;font-weight:600}'
++'.dmtools .rxlike svg{width:17px;height:17px;display:block!important;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
++'.dmtools .rxlike.on{color:#5b2de8!important}.dmtools .rxlike.on svg{fill:#5b2de8;stroke:#5b2de8}.dmtools .rxlike .em{font-size:16px;line-height:1}'
++'.dmtools .rxchip{display:inline-flex!important;align-items:center;gap:3px;padding:2px 8px!important;border-radius:12px!important;background:#f2edff!important;border:1px solid #e0d6fb!important;color:#43318f!important;font-size:13px!important}'
++'.dmtools .rxchip.mine{border-color:#5b2de8!important;background:#e9e0ff!important}'
++'.rxpop{position:absolute;bottom:34px;inset-inline-start:0;display:flex;gap:2px;background:#fff;border-radius:26px;padding:5px 8px;box-shadow:0 8px 28px #1a0f4a40;border:1px solid #e4ddef;z-index:60}'
++'.rxpop button{border:0!important;background:none!important;font-size:24px!important;padding:2px 5px!important;border-radius:50%!important;transition:transform .12s;min-width:0!important;height:auto!important}.rxpop button:hover,.rxpop button:active{transform:scale(1.35) translateY(-4px)}'
++'html[data-theme=dark] .rxpop{background:#241f45;border-color:#3a3270}html[data-theme=dark] .dmtools .rxchip{background:#2a2550!important;border-color:#3a3270!important;color:#d9ceff!important}html[data-theme=dark] .dmtools .rxlike{color:#b9b0d8!important}html[data-theme=dark] .dmtools .rxlike.on{color:#a98bff!important}html[data-theme=dark] .dmtools .rxlike.on svg{fill:#a98bff;stroke:#a98bff}';
+var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+var cache={};
+function ar(){return document.documentElement.lang==='ar'}
+function closePop(){document.querySelectorAll('.rxpop').forEach(function(p){p.remove()})}
+document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('.rxpop,.rxlike'))closePop()});
+function paintTools(art,rows){var tools=art.querySelector('.dmtools');if(!tools)return;var id=+art.dataset.mid;var mine=null,cnt={};rows.forEach(function(r){cnt[r.emoji]=(cnt[r.emoji]||0)+1;if(r.user_id===me.id)mine=r.emoji});
+tools.querySelectorAll('.rxchip,.rxlike').forEach(function(x){x.remove()});
+var old=tools.querySelectorAll('button[aria-label="React to message"],button[aria-label^="Reaction"]');old.forEach(function(x){x.remove()});
+var b=document.createElement('button');b.type='button';b.className='rxlike'+(mine?' on':'');b.setAttribute('aria-label',ar()?'تفاعل مع الرسالة':'React to message');var found=EM.filter(function(x){return x[0]===mine})[0];
+b.innerHTML=(mine&&mine!=='👍'?'<span class="em">'+mine+'</span>':'<svg viewBox="0 0 24 24"><path d="M7 11v9H4v-9h3zm0 0l4-8c1.5 0 2.5 1 2.5 2.5V9h5.2a2 2 0 0 1 2 2.3l-1 6.5a2 2 0 0 1-2 1.7H7"/></svg>')+'<span>'+(found?(ar()?found[2]:found[1]):(ar()?'إعجاب':'Like'))+'</span>';
+var timer=null,lp=false;
+function openPop(){closePop();var p=document.createElement('div');p.className='rxpop';EM.forEach(function(x){var q=document.createElement('button');q.type='button';q.textContent=x[0];q.setAttribute('aria-label',ar()?x[2]:x[1]);q.onclick=function(ev){ev.stopPropagation();closePop();window.reactMessage(id,x[0])};p.appendChild(q)});tools.appendChild(p)}
+b.addEventListener('pointerdown',function(){lp=false;timer=setTimeout(function(){lp=true;openPop()},450)});
+['pointerup','pointerleave','pointercancel'].forEach(function(ev){b.addEventListener(ev,function(){clearTimeout(timer)})});
+b.addEventListener('contextmenu',function(e){e.preventDefault()});
+b.addEventListener('click',function(e){e.stopPropagation();if(lp){lp=false;return}closePop();window.reactMessage(id,'👍')});
+if(window.matchMedia&&matchMedia('(hover:hover)').matches)b.addEventListener('mouseenter',function(){timer=setTimeout(openPop,500)});
+var first=tools.firstChild;tools.insertBefore(b,tools.querySelector('button[onclick^="replyMessage"]')?tools.querySelector('button[onclick^="replyMessage"]').nextSibling:null);
+Object.keys(cnt).forEach(function(em){var c=document.createElement('button');c.type='button';c.className='rxchip'+(mine===em?' mine':'');c.innerHTML=em+(cnt[em]>1?' <b>'+cnt[em]+'</b>':'');c.onclick=function(){window.reactMessage(id,em)};tools.appendChild(c)});
+tools.dataset.rx='1'}
+async function decorate(){if(typeof me==='undefined'||!me)return;var arts=[].slice.call(document.querySelectorAll('.dmentry')).filter(function(a){var t=a.querySelector('.dmtools');return t&&!t.dataset.rx});if(!arts.length)return;var ids=arts.map(function(a){return +a.dataset.mid});var r=await sb.from('message_reactions').select('message_id,user_id,emoji').in('message_id',ids);var rows=r.data||[];arts.forEach(function(a){var id=+a.dataset.mid;cache[id]=rows.filter(function(x){return x.message_id===id});paintTools(a,cache[id])})}
+var q=false;new MutationObserver(function(){if(q)return;q=true;setTimeout(function(){q=false;decorate()},60)}).observe(document.body,{childList:true,subtree:true});
+window.reactMessage=async function(id,emoji){var art=document.querySelector('.dmentry[data-mid="'+id+'"]');var rows=(cache[id]||[]).slice();var prev=rows.filter(function(x){return x.user_id===me.id})[0];var next=rows.filter(function(x){return x.user_id!==me.id});if(!prev||prev.emoji!==emoji)next.push({message_id:id,user_id:me.id,emoji:emoji});cache[id]=next;var keep=document.querySelector('.dmlog');var top=keep?keep.scrollTop:0;if(art)paintTools(art,next);if(keep)keep.scrollTop=top;
+var r=await sb.from('message_reactions').delete().eq('message_id',id).eq('user_id',me.id);if(!r.error&&(!prev||prev.emoji!==emoji))r=await sb.from('message_reactions').insert({message_id:id,user_id:me.id,emoji:emoji});if(r.error){cache[id]=rows;if(art)paintTools(art,rows);alert(r.error.message)}}
+})();
