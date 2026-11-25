@@ -587,3 +587,48 @@ window.addEventListener('load',function(){setTimeout(ovr,0)});
 var c=document.createElement('style');c.textContent='#rvfoot{max-width:760px;margin:6px auto 0;padding:18px 16px 96px;text-align:center;color:#71668b;font-size:12.5px;line-height:1.9}#rvfoot a{color:#5b2de8;text-decoration:none;margin:0 9px;white-space:nowrap;font-weight:600}#rvfoot a:hover{text-decoration:underline}#rvfoot .lg{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#43318f;margin-bottom:4px}#rvfoot .lg i{width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,#5b2de8,#8b5cf6);display:inline-block}html[data-theme=dark] #rvfoot{color:#9d93c4}html[data-theme=dark] #rvfoot a{color:#b9a2ff}html[data-theme=dark] #rvfoot .lg{color:#d9ceff}body:has(#rvfoot) main{padding-bottom:0!important}@media(min-width:900px){#rvfoot{padding-bottom:32px}}';document.head.appendChild(c);
 function paint(){var m=document.getElementById('app');if(!m)return;var f=document.getElementById('rvfoot');if(typeof me==='undefined'||!me||m.querySelector('footer')){if(f)f.remove();return}if(!f){f=document.createElement('footer');f.id='rvfoot';m.parentNode.insertBefore(f,m.nextSibling)}var a=ar();var sig=a?'a':'e';if(f.dataset.l===sig)return;f.dataset.l=sig;if(a)f.dir='rtl';else f.removeAttribute('dir');f.innerHTML='<div class="lg"><i></i>Recrova Talent</div><div><a href="help.html">'+(a?'مركز المساعدة':'Help Center')+'</a><a href="help.html#contact">'+(a?'تواصل معنا':'Contact us')+'</a><a href="privacy.html">'+(a?'الخصوصية':'Privacy')+'</a><a href="terms.html">'+(a?'الشروط':'Terms')+'</a></div><div>© 2026 Recrova Talent. '+(a?'جميع الحقوق محفوظة.':'All rights reserved.')+'</div>'}
 new MutationObserver(function(){clearTimeout(paint.t);paint.t=setTimeout(paint,100)}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['lang']});setInterval(paint,1500);paint()})();
+;(function(){
+var s=document.createElement('style');s.id='rvdeskcss';
+s.textContent='@media(min-width:1000px){'
++'body.signed-in nav#nav{position:static!important;width:auto!important;left:auto!important;right:auto!important;bottom:auto!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0 8px!important;flex-wrap:nowrap!important;gap:2px!important;order:2;overflow:visible!important}'
++'body.signed-in nav#nav button{flex:none!important;width:auto!important;min-width:64px!important;max-width:none!important;color:#c9c0ee!important;padding:6px 10px!important;border-radius:10px!important;font-size:11px!important;background:transparent!important}'
++'body.signed-in nav#nav button.on{color:#fff!important;background:rgba(255,255,255,.16)!important}'
++'body.signed-in nav#nav button svg{width:21px!important;height:21px!important}'
++'body.signed-in nav#nav button:hover{background:rgba(255,255,255,.1)!important}'
++'#app.rvdesk{display:grid;grid-template-columns:225px minmax(0,1fr) 300px;column-gap:20px;align-items:start;max-width:1128px}'
++'#app.rvdesk>.card.composer{grid-column:2;grid-row:1}#app.rvdesk>#posts{grid-column:2;grid-row:2}'
++'#app.rvdesk>.rvl{grid-column:1;grid-row:1/span 2;position:sticky;top:76px}#app.rvdesk>.rvr{grid-column:3;grid-row:1/span 2;position:sticky;top:76px}'
++'.rvside{padding:0;overflow:hidden}.rvside .rvh{padding:14px 16px 8px;font-weight:700;font-size:14px}.rvside .rvi{display:block;width:100%;text-align:start;border:0;background:none;padding:9px 16px;cursor:pointer;font:inherit;font-size:13px;color:inherit}.rvside .rvi:hover{background:#f4f0ff}.rvside .rvi small{display:block;color:#8a829b;font-size:12px}'
++'.rvl .rvtop{padding:18px 16px 12px;text-align:center;border-bottom:1px solid #eee7fa;cursor:pointer}.rvl .rvtop .av{display:inline-block;width:64px;height:64px;margin-bottom:8px}.rvl .rvtop b{display:block;font-size:15px}.rvl .rvtop small{display:block;color:#8a829b;font-size:12px;margin-top:2px}'
++'}'
++'@media(min-width:1000px) and (max-width:1100px){#app.rvdesk{grid-template-columns:200px minmax(0,1fr) 260px}}'
++'@media(max-width:999px){.rvl,.rvr{display:none!important}}'
++'html[data-theme=dark] .rvside .rvi:hover{background:#2d2656}html[data-theme=dark] .rvl .rvtop{border-color:#352f5c}';
+document.head.appendChild(s);
+var jobs=null,jt=0;
+function ar(){return typeof lang!=='undefined'&&lang==='ar'}
+function build(a){
+ var p=(typeof prof!=='undefined'&&prof)?prof:null;if(!p)return;
+ var A=ar();
+ var l=document.createElement('div');l.className='card rvside rvl';
+ l.innerHTML='<div class="rvtop" onclick="go(\'profile\')"><span class="av">'+avatar(p)+'</span><b class="pname">'+esc(p.name||'')+'</b><small>'+esc(p.headline||'')+'</small></div>'
+ +'<button class="rvi" onclick="go(\'profile\')">'+(A?'ملفي الشخصي':'My Profile')+'</button><button class="rvi" onclick="go(\'network\')">'+(A?'شبكتي':'My Network')+'</button><button class="rvi" onclick="go(\'jobs\')">'+(A?'الوظائف':'Jobs')+'</button>';
+ var r=document.createElement('div');r.className='card rvside rvr';r.id='rvr';
+ r.innerHTML='<div class="rvh">'+(A?'أحدث الوظائف':'Latest jobs')+'</div><div id="rvjobs"></div><button class="rvi" onclick="go(\'jobs\')" style="color:#5B2DE8;font-weight:600">'+(A?'عرض كل الوظائف':'See all jobs')+'</button>';
+ a.appendChild(l);a.appendChild(r);fill();
+}
+function fill(){
+ var b=document.getElementById('rvjobs');if(!b)return;
+ function paint(){b.innerHTML=(jobs||[]).map(function(j){return '<button class="rvi" onclick="jobPage(\''+j.id+'\')">'+esc(j.title||'')+'<small>'+esc(j.location||'')+'</small></button>'}).join('')||'<div class="rvi" style="color:#8a829b">—</div>'}
+ if(jobs){paint();return}
+ if(Date.now()-jt<8000)return;jt=Date.now();
+ try{sb.from('jobs').select('id,title,location').or('closed.is.null,closed.eq.false').order('created_at',{ascending:false}).limit(5).then(function(x){jobs=x&&x.data||[];paint()})}catch(e){}
+}
+function tick(){
+ var a=document.getElementById('app');if(!a)return;
+ var feed=window.innerWidth>=1000&&document.body.classList.contains('signed-in')&&a.querySelector(':scope>.card.composer')&&a.querySelector(':scope>#posts');
+ if(feed){if(!a.classList.contains('rvdesk'))a.classList.add('rvdesk');if(!a.querySelector(':scope>.rvl'))build(a);else fill()}
+ else{if(a.classList.contains('rvdesk'))a.classList.remove('rvdesk');a.querySelectorAll(':scope>.rvl,:scope>.rvr').forEach(function(x){x.remove()})}
+}
+setInterval(tick,1000);window.addEventListener('resize',tick);
+})();
