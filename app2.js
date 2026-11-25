@@ -658,3 +658,6 @@ function end(){if(!on)return;on=false;if(dy>=TH)refresh();else reset();dy=0}
 document.addEventListener('touchend',end,{passive:true});document.addEventListener('touchcancel',function(){on=false;reset()},{passive:true});
 window.rvPull=refresh;
 })();
+;(function(){var s=document.createElement('style');s.id='rvpillcss';
+s.textContent='@media(min-width:701px){body.signed-in nav#nav{position:fixed!important;left:50%!important;right:auto!important;bottom:16px!important;transform:translateX(-50%);width:min(560px,calc(100vw - 32px))!important;border:1px solid #e9e3f7!important;border-radius:25px!important;padding:7px!important;background:rgba(255,255,255,.97)!important;box-shadow:0 7px 32px rgba(35,16,80,.16)!important;display:flex!important;justify-content:space-between!important;gap:0!important;margin:0!important;overflow:visible!important}body.signed-in nav#nav button{flex:1 1 0!important;width:0!important;min-width:0!important;max-width:none!important;flex-direction:column!important;align-items:center!important;gap:4px!important;font-size:10px!important;padding:9px 4px!important;border-radius:19px!important}body.signed-in nav#nav button span{display:block!important}html[data-theme=dark] body.signed-in nav#nav{background:rgba(28,25,51,.97)!important;border-color:#352f5c!important}}';
+document.head.appendChild(s)})();
