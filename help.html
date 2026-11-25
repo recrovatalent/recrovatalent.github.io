@@ -14,7 +14,7 @@ a{color:var(--pr)}.list a.it{display:block;text-decoration:none;color:var(--tx);
 input,textarea,select{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;margin:4px 0 12px}
 .btn{background:var(--pr);color:#fff;border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;cursor:pointer}.btn[disabled]{opacity:.6}
 .ok{color:#16a34a;font-weight:600}.er{color:#dc2626}.back{display:inline-block;margin:0 0 12px}
-footer{text-align:center;color:var(--mu);font-size:13px;padding:10px 0 30px}footer a{margin:0 8px}
+footer{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;text-align:center;color:var(--mu);font-size:13px;padding:14px 16px 34px}footer a{margin:0}footer div{flex-basis:100%}.bk{display:inline-block;margin:0 0 12px;font-weight:600;text-decoration:none}
 </style></head><body>
 <header><a class="lg" href="/">Recrova <span>Talent</span></a><button class="lb" id="lb" onclick="tg()">العربية</button></header>
 <main id="m"></main>
@@ -57,10 +57,10 @@ function tg(){L=L==='ar'?'en':'ar';localStorage.lang=L;draw()}
 function draw(){var x=X[L],i=L==='ar'?1:0,h=(location.hash||'').slice(1);document.documentElement.lang=L;document.documentElement.dir=L==='ar'?'rtl':'ltr';document.getElementById('lb').textContent=L==='ar'?'English':'العربية';
 var a=A.filter(function(q){return q.id===h})[0],o='';
 if(a){o='<a class="back" href="#">'+x.back+'</a><div class="card"><h1>'+a.t[i]+'</h1>'+a.b[i]+'</div>';document.title=a.t[i]+' - Recrova Talent'}
-else{document.title=x.h+' - Recrova Talent';o='<h1>'+x.h+'</h1><p class="sub">'+x.s+'</p><div class="list">'+A.map(function(q){return '<a class="it" href="#'+q.id+'">'+q.t[i]+'<small>'+q.s[i]+'</small></a>'}).join('')+'</div>'}
+else{document.title=x.h+' - Recrova Talent';o='<a class="bk" href="/">'+(L==='ar'?'→ ':'← ')+x.home+'</a><h1>'+x.h+'</h1><p class="sub">'+x.s+'</p><div class="list">'+A.map(function(q){return '<a class="it" href="#'+q.id+'">'+q.t[i]+'<small>'+q.s[i]+'</small></a>'}).join('')+'</div>'}
 o+='<div class="card" id="contact"><h2>'+x.ct+'</h2><p class="sub">'+x.cs+'<a href="mailto:'+EM+'">'+EM+'</a></p><form id="cf" onsubmit="return sendc(event)"><label>'+x.nm+'<input id="cn" maxlength="120" autocomplete="name"></label><label>'+x.em+'<input id="ce" type="email" maxlength="200" autocomplete="email" required></label><label>'+x.tp+'<select id="ct">'+x.tps.map(function(t,k){return '<option value="'+X.en.tps[k]+'">'+t+'</option>'}).join('')+'</select></label><label>'+x.msg+'<textarea id="cm" rows="5" maxlength="4000" required></textarea></label><button class="btn" id="cb">'+x.send+'</button><p id="cs2" role="status"></p></form></div>';
 document.getElementById('m').innerHTML=o;
-document.getElementById('ft').innerHTML='<a href="/">'+x.home+'</a> · <a href="privacy.html">'+x.pv+'</a> · <a href="#">'+x.help+'</a><div>© 2026 Recrova Talent</div>';
+document.getElementById('ft').innerHTML='<a href="privacy.html">'+x.pv+'</a><a href="terms.html">'+(L==='ar'?'شروط الاستخدام':'Terms of Use')+'</a><a href="#">'+x.help+'</a><div>© 2026 Recrova Talent</div>';
 if(h==='contact')setTimeout(function(){var c=document.getElementById('contact');c&&c.scrollIntoView()},50)}
 async function sendc(e){e.preventDefault();var x=X[L],s=document.getElementById('cs2'),em=document.getElementById('ce').value.trim(),m=document.getElementById('cm').value.trim();if(!/^\S+@\S+\.\S+$/.test(em)||m.length<5){s.className='er';s.textContent=x.bad;return false}
 var b=document.getElementById('cb');b.disabled=true;s.className='';s.textContent='...';var uid=null;try{var r=await sb.auth.getSession();uid=r.data.session&&r.data.session.user.id}catch(e2){}
