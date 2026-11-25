@@ -303,4 +303,5 @@ window.reviewVerify=async function(id,ok){
  var row=(window._vr||[]).find(function(x){return x.id===id});var r=await sb.rpc('review_verification',{req:id,approve:ok});if(r.error){alert(r.error.message);return}
  if(row){try{await sb.storage.from(IDB).remove([row.id_front,row.id_back].filter(Boolean));await sb.from('verification_requests').update({id_front:null,id_back:null}).eq('id',id)}catch(e){}}
  verifyAdmin()};
+var stl3=document.createElement('style');stl3.textContent='#jl a.pl{color:#5B2DE8;font-weight:700;text-decoration:underline;text-decoration-color:#5B2DE855;text-underline-offset:3px}#jl a.pl:hover{color:#4a1fc4;text-decoration-color:currentColor}html[data-theme=dark] #jl a.pl{color:#b69cff}html[data-theme=dark] #jl a.pl:hover{color:#d3c3ff}';document.head.appendChild(stl3);
 });
