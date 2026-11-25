@@ -553,3 +553,4 @@ var tm=0;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(run,200)
 document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#openjobs')&&false)return},true);
 })();
 ;(function(){var s=document.createElement('style');s.textContent='[data-theme=dark] .dmlist aside.l,[data-theme=dark] .dm aside.l{border-color:#352f5c!important}[data-theme=dark] .dmlist .l{border-bottom-color:#352f5c!important}';document.head.appendChild(s)})();
+;(function(){var s=document.createElement('style');s.textContent='@media(max-width:560px){h2.pname{font-size:16.5px!important;letter-spacing:-.3px!important;line-height:1.25;word-break:normal;overflow-wrap:anywhere}h2.pname .verifiedbadge,h2.pname .verifiedicon{margin-inline-start:4px;vertical-align:-2px}}';document.head.appendChild(s)})();
