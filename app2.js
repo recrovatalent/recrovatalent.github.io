@@ -552,3 +552,4 @@ async function run(){if(busy||typeof sb==='undefined'||typeof me==='undefined'||
 var tm=0;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(run,200)}).observe(document.body,{childList:true,subtree:true});
 document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#openjobs')&&false)return},true);
 })();
+;(function(){var s=document.createElement('style');s.textContent='[data-theme=dark] .dmlist aside.l,[data-theme=dark] .dm aside.l{border-color:#352f5c!important}[data-theme=dark] .dmlist .l{border-bottom-color:#352f5c!important}';document.head.appendChild(s)})();
