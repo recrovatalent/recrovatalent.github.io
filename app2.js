@@ -755,11 +755,11 @@ function H(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {
 async function run(){
  if(busy||typeof page==='undefined'||page!=='user'||typeof viewId==='undefined'||!viewId)return;
  var A=document.getElementById('app');if(!A)return;
- var top=A.querySelector('.card');if(!top||!/Company|شركة/.test(top.innerText.slice(0,200)))return;
- var cards=[].slice.call(A.querySelectorAll(':scope > .card'));var about=cards.filter(function(c){var h=c.querySelector('h2,h3');return h&&/^(About|نبذة)/.test(h.textContent.trim())})[0];
+ var kids=[].slice.call(A.children);var top=kids.filter(function(c){return /^[^\n]*\n?[^\n]*\n?[^\n]*(Company|\u0634\u0631\u0643\u0629)\s*\u00b7/.test(c.innerText.slice(0,160))})[0];if(!top)return;
+ var about=kids.filter(function(c){return /^\s*(About|\u0646\u0628\u0630\u0629)/.test(c.innerText)})[0];
  if(!about)return;
  var ar=typeof lang!=='undefined'&&lang==='ar';
- cards.forEach(function(c){var h=c.querySelector('h2,h3');if(h&&/^(Experience|Education|Skills|الخبرات|الخبرة|التعليم|المهارات)/.test(h.textContent.trim()))c.style.display='none'});
+ kids.forEach(function(c){if(/^\s*(Experience|Education|Skills|\u0627\u0644\u062e\u0628\u0631\u0627\u062a|\u0627\u0644\u062e\u0628\u0631\u0629|\u0627\u0644\u062a\u0639\u0644\u064a\u0645|\u0627\u0644\u0645\u0647\u0627\u0631\u0627\u062a)/.test(c.innerText))c.style.display='none'});
  if(document.getElementById('rvco'))return;
  busy=true;var id=viewId;
  try{
