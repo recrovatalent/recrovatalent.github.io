@@ -706,7 +706,7 @@ setInterval(function(){
 window.rvBack=back;window.rvStack=function(){return stack.length};window.rvDump=function(){return JSON.stringify(stack.map(function(s){return [s.page,s.viewId&&1,s.job&&1,s.set,s.apps,s.y]}))};
 })();
 ;(function(){
-var orig=window.loadPeople;if(typeof orig!=='function')return;
+function inst(){var orig=window.loadPeople;if(typeof orig!=='function'||orig.__pymk)return;
 window.loadPeople=async function(){
  var r=await orig.apply(this,arguments);
  try{
@@ -724,5 +724,6 @@ window.loadPeople=async function(){
   box.innerHTML='<b>'+(ar?'أشخاص قد تعرفهم':'People you may know')+'</b><div style="display:flex;gap:10px;overflow-x:auto;padding:10px 2px 2px;scroll-snap-type:x proximity">'+list.map(function(p){return '<div style="flex:0 0 150px;scroll-snap-align:start;border:1px solid var(--line,#e5def7);border-radius:14px;padding:10px;text-align:center"><div class="av" style="margin:0 auto 6px;cursor:pointer" onclick="openUser(\''+p.id+'\')">'+avatar(p)+'</div><div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><b>'+lk(p.id,p.name,p.verified)+'</b></div><div class="muted" style="font-size:11px;height:28px;overflow:hidden">'+esc(p.headline||'')+'</div><button class="btn" style="width:100%;margin-top:6px" onclick="follow(\''+p.id+'\',false,\'network\')">'+(back.has(p.id)?(ar?'متابعة بالمثل':'Follow back'):(ar?'متابعة':'Follow'))+'</button></div>'}).join('')+'</div>';
   pl.parentNode.insertBefore(box,pl);
  }catch(e){}
- return r}
+ return r};window.loadPeople.__pymk=1}
+if(document.readyState==='complete')inst();else window.addEventListener('load',inst);
 })();
