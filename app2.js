@@ -749,3 +749,26 @@ document.addEventListener('input',function(e){
 setInterval(function(){try{ensure()}catch(e){}},900);
 window.rvTypingTest=function(){return ch};
 })();
+;(function(){
+var busy=false;
+function H(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+async function run(){
+ if(busy||typeof page==='undefined'||page!=='user'||typeof viewId==='undefined'||!viewId)return;
+ var A=document.getElementById('app');if(!A||A.dataset.rvco===viewId)return;
+ var top=A.querySelector('.card');if(!top||!/Company|شركة/.test(top.innerText.slice(0,200)))return;
+ var cards=[].slice.call(A.querySelectorAll(':scope > .card'));var about=cards.filter(function(c){var h=c.querySelector('h2,h3');return h&&/^(About|نبذة)/.test(h.textContent.trim())})[0];
+ if(!about)return;
+ busy=true;var id=viewId;A.dataset.rvco=id;
+ try{
+  var ar=typeof lang!=='undefined'&&lang==='ar';
+  cards.forEach(function(c){var h=c.querySelector('h2,h3');if(h&&/^(Experience|Education|Skills|الخبرات|الخبرة|التعليم|المهارات)/.test(h.textContent.trim()))c.style.display='none'});
+  var r=await sb.from('jobs').select('id,title,location,created_at,closed,company_id,company_profile_id').or('company_profile_id.eq.'+id+',company_id.eq.'+id).order('created_at',{ascending:false}).limit(20);
+  var jobs=(r.data||[]).filter(function(j){return !j.closed});
+  if(viewId!==id||document.getElementById('rvco'))return;
+  var box=document.createElement('div');box.id='rvco';box.className='card';
+  box.innerHTML='<h3>'+(ar?'الوظائف المتاحة':'Open jobs')+' ('+jobs.length+')</h3>'+(jobs.length?jobs.map(function(j){return '<div class="row" style="justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line,#eee)"><div style="min-width:0"><b style="display:block;overflow:hidden;text-overflow:ellipsis">'+H(j.title)+'</b><span class="muted" style="font-size:12px">'+H(j.location||'')+'</span></div><button class="btn o" onclick="jobPage('+j.id+')">'+(ar?'عرض':'View')+'</button></div>'}).join(''):'<p class="muted">'+(ar?'لا توجد وظائف مفتوحة الآن.':'No open jobs right now.')+'</p>');
+  about.parentNode.insertBefore(box,about.nextSibling);
+ }catch(e){}finally{busy=false}
+}
+setInterval(run,700);
+})();
