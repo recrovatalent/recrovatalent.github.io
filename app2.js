@@ -727,3 +727,25 @@ window.loadPeople=async function(){
  return r};window.loadPeople.__pymk=1}
 if(document.readyState==='complete')inst();else window.addEventListener('load',inst);
 })();
+;(function(){
+var ch=null,key='',hideT=null,lastSent=0;
+function ensure(){
+ if(typeof me==='undefined'||!me||typeof chatWith==='undefined'||!chatWith||page!=='msgs'){if(ch){try{sb.removeChannel(ch)}catch(e){}ch=null;key=''}return}
+ var k='rvtyp-'+[me.id,chatWith].sort().join('-');if(k===key)return;
+ if(ch){try{sb.removeChannel(ch)}catch(e){}}
+ key=k;ch=sb.channel(k,{config:{broadcast:{self:false}}});
+ ch.on('broadcast',{event:'typing'},function(m){if(!m||!m.payload||m.payload.from===me.id)return;show()}).subscribe();
+}
+function show(){
+ var box=document.getElementById('rvtyping');
+ if(!box){var mi=document.getElementById('mi');if(!mi)return;box=document.createElement('div');box.id='rvtyping';box.className='muted';box.style.cssText='font-size:12px;padding:2px 14px;min-height:16px';var f=mi.closest('form')||mi.parentNode;f.parentNode.insertBefore(box,f)}
+ box.textContent=(typeof lang!=='undefined'&&lang==='ar')?'يكتب الآن...':'typing...';
+ clearTimeout(hideT);hideT=setTimeout(function(){var b=document.getElementById('rvtyping');if(b)b.textContent=''},3000)
+}
+document.addEventListener('input',function(e){
+ if(!e.target||e.target.id!=='mi'||!ch)return;var n=Date.now();if(n-lastSent<1500)return;lastSent=n;
+ try{ch.send({type:'broadcast',event:'typing',payload:{from:me.id}})}catch(x){}
+},true);
+setInterval(function(){try{ensure()}catch(e){}},900);
+window.rvTypingTest=function(){return ch};
+})();
