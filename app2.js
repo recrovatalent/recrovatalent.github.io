@@ -699,8 +699,8 @@ setInterval(function(){
  hook();
  var a=document.getElementById('app');if(!a||typeof page==='undefined'||typeof me==='undefined'||!me)return;
  var has=a.querySelector(':scope>button.rvback');
- if(INNER.indexOf(page)<0){if(has)has.remove();return}
- var f=a.firstElementChild;if(has||(f&&f.tagName==='BUTTON'&&/Back|\u0631\u062c\u0648\u0639/.test(f.textContent)))return;
+ if(page==='feed'||!stack.length){if(has)has.remove();return}
+ var f=a.firstElementChild;if(has||(f&&/^\s*[\u2190\u2192]?\s*(Back|\u0631\u062c\u0648\u0639)/.test(f.textContent)))return;
  var b=document.createElement('button');b.className='btn o rvback';b.textContent=(typeof lang!=='undefined'&&lang==='ar')?'\u2192 \u0631\u062c\u0648\u0639':'\u2190 Back';a.insertBefore(b,a.firstChild)
 },600);
 window.rvBack=back;window.rvStack=function(){return stack.length};window.rvDump=function(){return JSON.stringify(stack.map(function(s){return [s.page,s.viewId&&1,s.job&&1,s.set,s.apps,s.y]}))};
