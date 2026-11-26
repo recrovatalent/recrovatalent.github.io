@@ -705,3 +705,24 @@ setInterval(function(){
 },600);
 window.rvBack=back;window.rvStack=function(){return stack.length};window.rvDump=function(){return JSON.stringify(stack.map(function(s){return [s.page,s.viewId&&1,s.job&&1,s.set,s.apps,s.y]}))};
 })();
+;(function(){
+var orig=window.loadPeople;if(typeof orig!=='function')return;
+window.loadPeople=async function(){
+ var r=await orig.apply(this,arguments);
+ try{
+  var q=((document.getElementById('ps')||{}).value||'').trim();var old=document.getElementById('pymk');if(old)old.remove();
+  var pl=document.getElementById('pl');if(q||!pl||typeof me==='undefined'||!me)return;
+  var ar=lang==='ar';
+  var a=await sb.from('follows').select('followee_id').eq('follower_id',me.id);var f=new Set((a.data||[]).map(function(x){return x.followee_id}));
+  var b=await sb.from('follows').select('follower_id').eq('followee_id',me.id);var back=new Set((b.data||[]).map(function(x){return x.follower_id}));
+  var m=await sb.from('profiles').select('location,interests').eq('id',me.id).maybeSingle();var my=m.data||{};
+  var c=await sb.from('profiles').select('id,name,kind,headline,location,interests,avatar_path,photo_frame,verified').neq('id',me.id).limit(200);
+  var words=String(my.interests||'').toLowerCase().split(/[\s,;]+/).filter(function(w){return w.length>2});
+  var list=(c.data||[]).filter(function(p){return !f.has(p.id)&&p.kind!=='company'}).map(function(p){var s=0;if(back.has(p.id))s+=5;if(my.location&&p.location&&String(p.location).toLowerCase()===String(my.location).toLowerCase())s+=2;var txt=(String(p.interests||'')+' '+String(p.headline||'')).toLowerCase();words.forEach(function(w){if(txt.indexOf(w)>-1)s+=1});if(p.verified)s+=1;p._s=s;return p}).sort(function(x,y){return y._s-x._s}).slice(0,8);
+  if(!list.length)return;
+  var box=document.createElement('div');box.id='pymk';box.className='card';
+  box.innerHTML='<b>'+(ar?'أشخاص قد تعرفهم':'People you may know')+'</b><div style="display:flex;gap:10px;overflow-x:auto;padding:10px 2px 2px;scroll-snap-type:x proximity">'+list.map(function(p){return '<div style="flex:0 0 150px;scroll-snap-align:start;border:1px solid var(--line,#e5def7);border-radius:14px;padding:10px;text-align:center"><div class="av" style="margin:0 auto 6px;cursor:pointer" onclick="openUser(\''+p.id+'\')">'+avatar(p)+'</div><div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><b>'+lk(p.id,p.name,p.verified)+'</b></div><div class="muted" style="font-size:11px;height:28px;overflow:hidden">'+esc(p.headline||'')+'</div><button class="btn" style="width:100%;margin-top:6px" onclick="follow(\''+p.id+'\',false,\'network\')">'+(back.has(p.id)?(ar?'متابعة بالمثل':'Follow back'):(ar?'متابعة':'Follow'))+'</button></div>'}).join('')+'</div>';
+  pl.parentNode.insertBefore(box,pl);
+ }catch(e){}
+ return r}
+})();
