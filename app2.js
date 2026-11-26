@@ -738,7 +738,7 @@ function ensure(){
 }
 function show(){
  var box=document.getElementById('rvtyping');
- if(!box){var mi=document.getElementById('mi');if(!mi)return;box=document.createElement('div');box.id='rvtyping';box.className='muted';box.style.cssText='font-size:12px;padding:2px 14px;min-height:16px';var f=mi.closest('form')||mi.parentNode;f.parentNode.insertBefore(box,f)}
+ if(!box){var mi=document.getElementById('mi');if(!mi)return;box=document.createElement('div');box.id='rvtyping';box.className='muted';box.style.cssText='font-size:12px;padding:2px 14px;min-height:16px';mi.parentNode.insertBefore(box,mi)}
  box.textContent=(typeof lang!=='undefined'&&lang==='ar')?'يكتب الآن...':'typing...';
  clearTimeout(hideT);hideT=setTimeout(function(){var b=document.getElementById('rvtyping');if(b)b.textContent=''},3000)
 }
