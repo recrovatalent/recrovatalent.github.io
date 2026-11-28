@@ -794,12 +794,11 @@ s.textContent='body{display:flex;flex-direction:column;min-height:100vh;min-heig
 document.head.appendChild(s);
 var APK='https://github.com/recrovatalent/recrovatalent.github.io/releases/download/app-v1/Recrova.apk';
 var DL='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
-var PH='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M12 18h.01"/></svg>';
+var PH='<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M6.8 4.6 5.4 2.7a.5.5 0 0 1 .8-.6l1.6 1.9a10 10 0 0 1 8.4 0l1.6-1.9a.5.5 0 0 1 .8.6l-1.4 1.9A8.5 8.5 0 0 1 21 12H3a8.5 8.5 0 0 1 3.8-7.4zM8.5 9.2a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2zm7 0a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2zM3 13h18v4.6a2.4 2.4 0 0 1-2.4 2.4h-.3v1.5a1.5 1.5 0 0 1-3 0V20H8.7v1.5a1.5 1.5 0 0 1-3 0V20h-.3A2.4 2.4 0 0 1 3 17.6V13z"/></svg>';
 function langA(){return typeof lang!=='undefined'&&lang==='ar'}
 function badges(A){
  var d=document.createElement('div');d.className='appbadges';d.dataset.lang=A?'ar':'en';
- d.innerHTML='<a class="appbadge" href="'+APK+'" rel="noopener">'+DL+'<span class="bt"><small>'+(A?'تحميل مباشر':'Direct download')+'</small><b>Android APK</b></span></a>'
- +'<a class="appbadge" href="help.html#app">'+PH+'<span class="bt"><small>'+(A?'آيفون':'iPhone')+'</small><b>'+(A?'إضافة للشاشة الرئيسية':'Add to Home Screen')+'</b></span></a>';
+ d.innerHTML='<a class="appbadge" style="flex:0 1 auto;min-width:200px" href="'+APK+'" rel="noopener">'+PH+'<span class="bt"><small>'+(A?'تحميل مباشر':'Direct download')+'</small><b>'+(A?'حمّل لأجهزة Android':'Download for Android')+'</b></span></a>';
  return d;
 }
 function card(A){
