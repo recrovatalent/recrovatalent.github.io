@@ -44,7 +44,7 @@ new MutationObserver(addRem).observe(document.documentElement,{childList:true,su
 })();
 ;(function(){
 var E=function(id){return document.getElementById(id)};
-function ar(){return window.lang==='ar'}
+function ar(){try{return lang==='ar'}catch(e){return false}}
 function tx(en,a){return ar()?a:en}
 function shell(inner){var app=E('app');app.innerHTML='<div class="card auth fpflow">'+inner+'</div>'}
 function msg(c,t){var m=E('fpmsg');if(m){m.className=c;m.textContent=t}}
