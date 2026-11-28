@@ -773,3 +773,50 @@ async function run(){
 }
 setInterval(run,700);
 })();
+;(function(){
+var s=document.createElement('style');s.id='rvbadgecss';
+s.textContent='body{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}'
++'#app{flex:1 0 auto}'
++'#rvfoot{margin-top:auto;width:100%}'
++'.appbadges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:420px;margin:10px auto 0;padding:0 16px}'
++'.appbadge{display:flex;align-items:center;gap:9px;background:#12104f;color:#fff;border-radius:10px;padding:8px 14px;text-decoration:none;flex:1;min-width:150px;max-width:195px;border:1px solid #2a2460}'
++'.appbadge .bt{min-width:0}.appbadge small{display:block;font-size:10px;opacity:.75;line-height:1.2;white-space:normal}.appbadge b{display:block;font-size:13.5px;line-height:1.3;font-weight:700;white-space:normal}'
++'.appbadge svg{flex-shrink:0}'
++'.card.appcard{padding:12px 14px 14px;text-align:center}'
++'.card.appcard .act{font-weight:700;font-size:13.5px;color:#43318f;margin-bottom:2px}'
++'.card.appcard .appbadges{padding:0;max-width:none}'
++'#app.rvdesk>.card.appcard{grid-column:2;grid-row:1}'
++'#app.rvdesk>.card.composer{grid-row:2}'
++'#app.rvdesk>#posts{grid-row:3}'
++'#app.rvdesk>.rvl,#app.rvdesk>.rvr{grid-row:1/span 3}'
++'html[data-theme=dark] .appbadge{background:#241f4a;border-color:#3d3570;color:#f0ecff}'
++'html[data-theme=dark] .card.appcard .act{color:#d9ceff}';
+document.head.appendChild(s);
+var APK='https://github.com/recrovatalent/recrovatalent.github.io/releases/download/app-v1/Recrova.apk';
+var DL='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
+var PH='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M12 18h.01"/></svg>';
+function langA(){return typeof lang!=='undefined'&&lang==='ar'}
+function badges(A){
+ var d=document.createElement('div');d.className='appbadges';d.dataset.lang=A?'ar':'en';
+ d.innerHTML='<a class="appbadge" href="'+APK+'" rel="noopener">'+DL+'<span class="bt"><small>'+(A?'تحميل مباشر':'Direct download')+'</small><b>Android APK</b></span></a>'
+ +'<a class="appbadge" href="help.html#app">'+PH+'<span class="bt"><small>'+(A?'آيفون':'iPhone')+'</small><b>'+(A?'إضافة للشاشة الرئيسية':'Add to Home Screen')+'</b></span></a>';
+ return d;
+}
+function card(A){
+ var c=document.createElement('div');c.className='card appcard';c.dataset.lang=A?'ar':'en';
+ c.innerHTML='<div class="act">'+(A?'حمّل التطبيق':'Get the app')+'</div>';
+ c.appendChild(badges(A));return c;
+}
+function sync(){
+ var A=langA();
+ var au=document.querySelector('.authshell'),f=document.getElementById('rvfoot');
+ var bg=document.querySelector('body>.appbadges');
+ if(au&&f){if(!bg)f.insertAdjacentElement('beforebegin',badges(A));else if(bg.dataset.lang!==(A?'ar':'en')){bg.remove();f.insertAdjacentElement('beforebegin',badges(A))}}
+ else if(bg)bg.remove();
+ var co=document.querySelector('#app>.card.composer');
+ var ac=document.querySelector('#app>.card.appcard');
+ if(co){if(!ac)co.insertAdjacentElement('beforebegin',card(A));else if(ac.dataset.lang!==(A?'ar':'en')){ac.remove();co.insertAdjacentElement('beforebegin',card(A))}}
+ else if(ac)ac.remove();
+}
+new MutationObserver(function(){clearTimeout(sync.t);sync.t=setTimeout(sync,150)}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['lang','class']});
+setInterval(sync,1500);sync()})();
