@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.recrovatalent.twa",
+        "sha256_cert_fingerprints": ["50:23:49:CC:A2:84:C9:01:79:97:14:25:2C:5B:83:AE:37:B4:5E:05:C5:8D:C2:08:30:E7:02:4C:E1:EE:EA:22"]
+      }
+    }]
