@@ -781,17 +781,18 @@ s.textContent='body{display:flex;flex-direction:column;min-height:100vh;min-heig
 +'.appbadges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:420px;margin:10px auto 0;padding:0 16px}'
 +'.appbadge{display:flex;align-items:center;gap:9px;background:#12104f;color:#fff;border-radius:10px;padding:8px 14px;text-decoration:none;flex:1;min-width:150px;max-width:195px;border:1px solid #2a2460}'
 +'.appbadge .bt{min-width:0}.appbadge small{display:block;font-size:10px;opacity:.75;line-height:1.2;white-space:normal}.appbadge b{display:block;font-size:13.5px;line-height:1.3;font-weight:700;white-space:normal}'
-+'.appbadge svg{flex-shrink:0}'
++'.appbadge svg{flex-shrink:0}.appbadge img{flex-shrink:0;width:26px;height:26px;border-radius:6px;background:#fff}'
 +'html[data-theme=dark] .appbadge{background:#241f4a;border-color:#3d3570;color:#f0ecff}'
 ;
 document.head.appendChild(s);
 var APK='https://github.com/recrovatalent/recrovatalent.github.io/releases/download/app-v1/Recrova.apk';
+var LOGO='https://wfznzvctfxddafsiycwv.supabase.co/storage/v1/object/public/recrova-images/brand/1-logo-r-512.png';
 var DL='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
 var PH='<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M6.8 4.6 5.4 2.7a.5.5 0 0 1 .8-.6l1.6 1.9a10 10 0 0 1 8.4 0l1.6-1.9a.5.5 0 0 1 .8.6l-1.4 1.9A8.5 8.5 0 0 1 21 12H3a8.5 8.5 0 0 1 3.8-7.4zM8.5 9.2a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2zm7 0a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2zM3 13h18v4.6a2.4 2.4 0 0 1-2.4 2.4h-.3v1.5a1.5 1.5 0 0 1-3 0V20H8.7v1.5a1.5 1.5 0 0 1-3 0V20h-.3A2.4 2.4 0 0 1 3 17.6V13z"/></svg>';
 function langA(){return typeof lang!=='undefined'&&lang==='ar'}
 function badges(A){
  var d=document.createElement('div');d.className='appbadges';d.dataset.lang=A?'ar':'en';
- d.innerHTML='<a class="appbadge" style="flex:0 1 auto;min-width:200px" href="'+APK+'" rel="noopener">'+PH+'<span class="bt"><small>'+(A?'تحميل مباشر':'Direct download')+'</small><b>'+(A?'حمّل لأجهزة Android':'Download for Android')+'</b></span></a>';
+ d.innerHTML='<a class="appbadge" style="flex:0 1 auto;min-width:200px" href="'+APK+'" rel="noopener"><img src="'+LOGO+'" alt="Recrova"><span class="bt"><small>'+(A?'تحميل مباشر':'Direct download')+'</small><b>'+(A?'تحميل التطبيق':'Download the app')+'</b></span></a>';
  return d;
 }
 function sync(){
